@@ -17,8 +17,14 @@ export class CreateAppointment {
   async execute( { costumer, startsAt, endsAt } : CreateAppointmentRequest): Promise<CreateAppointmentResponse> {
     const overlappingAppointment = await this.appointmentsRepository.findOverlappingAppointment(startsAt, endsAt);
 
-    if (!overlappingAppointment) {
-      throw new Error('Another appointment overlaps this appointment dates');
+    try {
+      if (!overlappingAppointment) {
+        throw new Error('Another appointment overlaps this appointment dates');
+      }
+    }
+    catch (err) {
+      console.log(err);
+      
     }
     
     const appointment = new Appointment({
